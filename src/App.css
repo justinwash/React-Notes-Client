@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  margin-top: 15px;
 }
 
 .App-logo {
@@ -19,4 +20,8 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+.App .navbar-brand {
+  font-weight: bold;
 }
