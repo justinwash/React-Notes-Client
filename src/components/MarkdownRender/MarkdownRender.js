@@ -13,9 +13,9 @@ const markdownRender = (props) => {
 
   return (
     <div class='MarkdownRender'>
-      <h2>{note.title}</h2>
+      <h2 id='content-header'>{note.title}</h2>
       <hr></hr>
-      <div id='content-header'>
+      <div>
         <ReactMarkdown escapeHtml={false} source={note.content} />
       </div>
       <hr></hr>

@@ -2,21 +2,22 @@
   text-align: left;
 }
 
-.MarkdownRender h2 {
+.MarkdownRender #content-header {
   text-align: center;
   font-family: 'PT Serif', serif;
 }
 
 .MarkdownRenderContent h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.MarkdownRenderContent h2,
+.MarkdownRenderContent h3,
+.MarkdownRenderContent h4,
+.MarkdownRenderContent h5,
+.MarkdownRenderContent h6 {
   font-family: 'Open Sans', sans-serif;
+  text-align: left;
 }
 
-.MarkdownRenderAttachments {
+#content-header > h2:nth-child(2) .MarkdownRenderAttachments {
   text-align: center !important;
   margin-bottom: 15px;
 }
