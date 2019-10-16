@@ -13,3 +13,7 @@
   font-size: 18px;
   font-family: monospace;
 }
+
+.Notes .form-group {
+  text-align: left;
+}

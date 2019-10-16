@@ -135,6 +135,7 @@ export default function Notes(props) {
           {note && (
             <form onSubmit={handleSubmit}>
               <FormGroup controlId='title'>
+                <ControlLabel>Title</ControlLabel>
                 <FormControl
                   value={title}
                   componentClass='input'
@@ -142,6 +143,7 @@ export default function Notes(props) {
                 />
               </FormGroup>
               <FormGroup controlId='content'>
+                <ControlLabel>Content</ControlLabel>
                 <FormControl
                   value={content}
                   componentClass='textarea'
@@ -166,25 +168,27 @@ export default function Notes(props) {
                 {!note.attachment && <ControlLabel>Attachment</ControlLabel>}
                 <FormControl onChange={handleFileChange} type='file' />
               </FormGroup>
-              <LoaderButton
-                block
-                type='submit'
-                bsSize='large'
-                bsStyle='primary'
-                isLoading={isLoading}
-                disabled={!validateForm()}
-              >
-                Save
-              </LoaderButton>
-              <LoaderButton
-                block
-                bsSize='large'
-                bsStyle='danger'
-                onClick={handleDelete}
-                isLoading={isDeleting}
-              >
-                Delete
-              </LoaderButton>
+              <div class='button-row'>
+                <LoaderButton
+                  block
+                  type='submit'
+                  bsSize='large'
+                  bsStyle='primary'
+                  isLoading={isLoading}
+                  disabled={!validateForm()}
+                >
+                  Save
+                </LoaderButton>
+                <LoaderButton
+                  block
+                  bsSize='large'
+                  bsStyle='danger'
+                  onClick={handleDelete}
+                  isLoading={isDeleting}
+                >
+                  Delete
+                </LoaderButton>
+              </div>
             </form>
           )}
         </Tab>
