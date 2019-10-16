@@ -1,0 +1,22 @@
+.MarkdownRender {
+  text-align: left;
+}
+
+.MarkdownRender h2 {
+  text-align: center;
+  font-family: 'PT Serif', serif;
+}
+
+.MarkdownRenderContent h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.MarkdownRenderAttachments {
+  text-align: center !important;
+  margin-bottom: 15px;
+}

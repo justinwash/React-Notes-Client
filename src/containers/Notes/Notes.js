@@ -1,8 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { API, Storage } from 'aws-amplify';
 import { s3Upload } from '../../libs/awsLib';
-import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import {
+  FormGroup,
+  FormControl,
+  ControlLabel,
+  Tabs,
+  Tab
+} from 'react-bootstrap';
 import LoaderButton from '../../components/LoaderButton/LoaderButton';
+import MarkdownRender from '../../components/MarkdownRender/MarkdownRender';
+
 import config from '../../config';
 
 import './Notes.css';
@@ -119,61 +127,68 @@ export default function Notes(props) {
 
   return (
     <div className='Notes'>
-      {note && (
-        <form onSubmit={handleSubmit}>
-          <FormGroup controlId='title'>
-            <FormControl
-              value={title}
-              componentClass='input'
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup controlId='content'>
-            <FormControl
-              value={content}
-              componentClass='textarea'
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </FormGroup>
-          {note.attachment && (
-            <FormGroup>
-              <ControlLabel>Attachment</ControlLabel>
-              <FormControl.Static>
-                <a
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  href={note.attachmentURL}
-                >
-                  {formatFilename(note.attachment)}
-                </a>
-              </FormControl.Static>
-            </FormGroup>
+      <Tabs defaultActiveKey='view' transition={true}>
+        <Tab eventKey='view' title='View'>
+          {note && <MarkdownRender note={note}></MarkdownRender>}
+        </Tab>
+        <Tab eventKey='edit' title='Edit'>
+          {note && (
+            <form onSubmit={handleSubmit}>
+              <FormGroup controlId='title'>
+                <FormControl
+                  value={title}
+                  componentClass='input'
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </FormGroup>
+              <FormGroup controlId='content'>
+                <FormControl
+                  value={content}
+                  componentClass='textarea'
+                  onChange={(e) => setContent(e.target.value)}
+                />
+              </FormGroup>
+              {note.attachment && (
+                <FormGroup>
+                  <ControlLabel>Attachment</ControlLabel>
+                  <FormControl.Static>
+                    <a
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      href={note.attachmentURL}
+                    >
+                      {formatFilename(note.attachment)}
+                    </a>
+                  </FormControl.Static>
+                </FormGroup>
+              )}
+              <FormGroup controlId='file'>
+                {!note.attachment && <ControlLabel>Attachment</ControlLabel>}
+                <FormControl onChange={handleFileChange} type='file' />
+              </FormGroup>
+              <LoaderButton
+                block
+                type='submit'
+                bsSize='large'
+                bsStyle='primary'
+                isLoading={isLoading}
+                disabled={!validateForm()}
+              >
+                Save
+              </LoaderButton>
+              <LoaderButton
+                block
+                bsSize='large'
+                bsStyle='danger'
+                onClick={handleDelete}
+                isLoading={isDeleting}
+              >
+                Delete
+              </LoaderButton>
+            </form>
           )}
-          <FormGroup controlId='file'>
-            {!note.attachment && <ControlLabel>Attachment</ControlLabel>}
-            <FormControl onChange={handleFileChange} type='file' />
-          </FormGroup>
-          <LoaderButton
-            block
-            type='submit'
-            bsSize='large'
-            bsStyle='primary'
-            isLoading={isLoading}
-            disabled={!validateForm()}
-          >
-            Save
-          </LoaderButton>
-          <LoaderButton
-            block
-            bsSize='large'
-            bsStyle='danger'
-            onClick={handleDelete}
-            isLoading={isDeleting}
-          >
-            Delete
-          </LoaderButton>
-        </form>
-      )}
+        </Tab>
+      </Tabs>
     </div>
   );
 }
