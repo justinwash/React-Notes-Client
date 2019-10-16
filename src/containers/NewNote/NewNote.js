@@ -1,14 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
-import LoaderButton from '../components/LoaderButton';
-import config from '../config';
+import LoaderButton from '../../components/LoaderButton/LoaderButton';
+import config from '../../config';
 import { API } from 'aws-amplify';
-import { s3Upload } from '../libs/awsLib';
+import { s3Upload } from '../../libs/awsLib';
 
 import './NewNote.css';
 
 export default function NewNote(props) {
   const file = useRef(null);
+  const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,7 +37,7 @@ export default function NewNote(props) {
     try {
       const attachment = file.current ? await s3Upload(file.current) : null;
 
-      await createNote({ content, attachment });
+      await createNote({ title, content, attachment });
       props.history.push('/');
     } catch (e) {
       alert(e);
@@ -45,6 +46,7 @@ export default function NewNote(props) {
   }
 
   function createNote(note) {
+    console.log(note);
     return API.post('notes', '/notes', {
       body: note
     });
@@ -53,6 +55,13 @@ export default function NewNote(props) {
   return (
     <div className='NewNote'>
       <form onSubmit={handleSubmit}>
+        <FormGroup controlId='title'>
+          <FormControl
+            value={title}
+            componentClass='input'
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </FormGroup>
         <FormGroup controlId='content'>
           <FormControl
             value={content}

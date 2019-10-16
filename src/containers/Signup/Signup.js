@@ -5,8 +5,8 @@ import {
   FormControl,
   ControlLabel
 } from 'react-bootstrap';
-import LoaderButton from '../components/LoaderButton';
-import { useFormFields } from '../libs/hooksLib';
+import LoaderButton from '../../components/LoaderButton/LoaderButton';
+import { useFormFields } from '../../libs/hooksLib';
 import { Auth } from 'aws-amplify';
 
 import './Signup.css';

@@ -1,16 +1,16 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Home from './containers/Home';
-import NotFound from './containers/NotFound';
-import Login from './containers/Login';
-import Signup from './containers/Signup';
-import NewNote from './containers/NewNote';
-import Notes from './containers/Notes';
-import Settings from './containers/Settings';
+import Home from './containers/Home/Home';
+import NotFound from './containers/NotFound/NotFound';
+import Login from './containers/Login/Login';
+import Signup from './containers/Signup/Signup';
+import NewNote from './containers/NewNote/NewNote';
+import Notes from './containers/Notes/Notes';
+import Settings from './containers/Settings/Settings';
 
-import AppliedRoute from './components/AppliedRoute';
-import AuthenticatedRoute from './components/AuthenticatedRoute';
-import UnauthenticatedRoute from './components/UnauthenticatedRoute';
+import AppliedRoute from './components/Routes/AppliedRoute';
+import AuthenticatedRoute from './components/Routes/AuthenticatedRoute';
+import UnauthenticatedRoute from './components/Routes/UnauthenticatedRoute';
 
 export default function Routes({ appProps }) {
   return (

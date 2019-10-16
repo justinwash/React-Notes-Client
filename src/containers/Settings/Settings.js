@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { API } from 'aws-amplify';
 import { Elements, StripeProvider } from 'react-stripe-elements';
-import BillingForm from '../components/BillingForm';
-import config from '../config';
+import BillingForm from '../../components/BillingForm/BillingForm';
+import config from '../../config';
 import './Settings.css';
 
 export default function Settings(props) {

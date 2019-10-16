@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import LoaderButton from './LoaderButton';
-import { useFormFields } from '../libs/hooksLib';
+import LoaderButton from '../LoaderButton/LoaderButton';
+import { useFormFields } from '../../libs/hooksLib';
 import './BillingForm.css';
 
 function BillingForm({ isLoading, onSubmit, ...props }) {

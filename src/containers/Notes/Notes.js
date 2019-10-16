@@ -1,15 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { API, Storage } from 'aws-amplify';
-import { s3Upload } from '../libs/awsLib';
+import { s3Upload } from '../../libs/awsLib';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
-import LoaderButton from '../components/LoaderButton';
-import config from '../config';
+import LoaderButton from '../../components/LoaderButton/LoaderButton';
+import config from '../../config';
 
 import './Notes.css';
 
 export default function Notes(props) {
   const file = useRef(null);
   const [note, setNote] = useState(null);
+  const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -22,12 +23,13 @@ export default function Notes(props) {
     async function onLoad() {
       try {
         const note = await loadNote();
-        const { content, attachment } = note;
+        const { title, content, attachment } = note;
 
         if (attachment) {
           note.attachmentURL = await Storage.vault.get(attachment);
         }
 
+        setTitle(title);
         setContent(content);
         setNote(note);
       } catch (e) {
@@ -39,7 +41,7 @@ export default function Notes(props) {
   }, [props.match.params.id]);
 
   function validateForm() {
-    return content.length > 0;
+    return content.length > 0 || title.length > 0;
   }
 
   function formatFilename(str) {
@@ -51,6 +53,7 @@ export default function Notes(props) {
   }
 
   function saveNote(note) {
+    console.log(note);
     return API.put('notes', `/notes/${props.match.params.id}`, {
       body: note
     });
@@ -77,6 +80,7 @@ export default function Notes(props) {
       }
 
       await saveNote({
+        title,
         content,
         attachment: attachment || note.attachment
       });
@@ -117,6 +121,13 @@ export default function Notes(props) {
     <div className='Notes'>
       {note && (
         <form onSubmit={handleSubmit}>
+          <FormGroup controlId='title'>
+            <FormControl
+              value={title}
+              componentClass='input'
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </FormGroup>
           <FormGroup controlId='content'>
             <FormControl
               value={content}
