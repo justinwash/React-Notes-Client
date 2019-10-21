@@ -8,7 +8,7 @@ const markdownRender = (props) => {
   const imageExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 
   function formatFilename(str) {
-    return str.replace(/^\w+-/, '');
+    return str ? str.replace(/^\w+-/, '') : '';
   }
 
   return (
