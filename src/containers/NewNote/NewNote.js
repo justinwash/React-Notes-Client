@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { FormGroup, FormControl, ControlLabel, Badge } from 'react-bootstrap';
 import LoaderButton from '../../components/LoaderButton/LoaderButton';
 import config from '../../config';
 import { API } from 'aws-amplify';
@@ -11,6 +11,7 @@ export default function NewNote(props) {
   const file = useRef(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [tags, setTags] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   function validateForm() {
@@ -21,27 +22,40 @@ export default function NewNote(props) {
     file.current = event.target.files[0];
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      if (tags.indexOf(event.target.value) === -1) {
+        setTags([...tags, event.target.value]);
+        console.log([...tags, event.target.value]);
+      }
 
-    if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
-      alert(
-        `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE /
-          1000000} MB.`
-      );
-      return;
+      event.target.value = '';
     }
+  }
 
-    setIsLoading(true);
+  async function handleSubmit(event) {
+    if (event.key !== 'Enter') {
+      event.preventDefault();
 
-    try {
-      const attachment = file.current ? await s3Upload(file.current) : null;
+      if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
+        alert(
+          `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE /
+            1000000} MB.`
+        );
+        return;
+      }
 
-      await createNote({ title, content, attachment });
-      props.history.push('/');
-    } catch (e) {
-      alert(e);
-      setIsLoading(false);
+      setIsLoading(true);
+
+      try {
+        const attachment = file.current ? await s3Upload(file.current) : null;
+
+        await createNote({ title, content, attachment, tags });
+        props.history.push('/');
+      } catch (e) {
+        alert(e);
+        setIsLoading(false);
+      }
     }
   }
 
@@ -50,6 +64,32 @@ export default function NewNote(props) {
     return API.post('notes', '/notes', {
       body: note
     });
+  }
+
+  function renderTags() {
+    if (tags.length > 0) {
+      const tagList = tags.map((tag) => {
+        return (
+          <Badge className='tagBadge' onClick={() => removeTag(tag)}>
+            {tag}
+          </Badge>
+        );
+      });
+
+      return <div>{tagList}</div>;
+    }
+  }
+
+  function removeTag(tag) {
+    console.log('removing: ' + tag);
+    let index = tags.indexOf(tag);
+    console.log('index ' + index);
+    if (index !== -1) {
+      let newTags = [...tags];
+      newTags.splice(index, 1);
+      console.log(newTags);
+      setTags(newTags);
+    }
   }
 
   return (
@@ -74,6 +114,15 @@ export default function NewNote(props) {
         <FormGroup controlId='file'>
           <ControlLabel>Attachment</ControlLabel>
           <FormControl onChange={handleFileChange} type='file' />
+        </FormGroup>
+        <FormGroup controlId='tags'>
+          <ControlLabel>Tags</ControlLabel>
+          <FormControl
+            placeholder='Enter to add tag, click to remove'
+            onKeyPress={handleKeyPress}
+            type='input'
+          />
+          {renderTags()}
         </FormGroup>
         <LoaderButton
           block

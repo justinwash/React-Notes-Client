@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { PageHeader, ListGroup, ListGroupItem, Badge } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { API } from 'aws-amplify';
 
@@ -43,7 +43,11 @@ export default function Home(props) {
                 : note.content.trim().split('\n')[0]
             }
           >
-            {'Created: ' + new Date(note.createdAt).toLocaleString()}
+            {note.tags &&
+              note.tags.map((tag) => {
+                return <Badge>{tag}</Badge>;
+              })}
+            {' Created: ' + new Date(note.createdAt).toLocaleString()}
           </ListGroupItem>
         </LinkContainer>
       ) : (
